@@ -1,7 +1,10 @@
 struct Params
-    Β::Float32
-    αm::Float32
-    αf::Float32
+    αMR::Float32
+    αFR::Float32
+    αMW::Float32
+    αFW::Float32
+    ρ::Float32
+    δ::Float32
     γMRG::Float32
     γFRM::Float32
     γMWG::Float32
