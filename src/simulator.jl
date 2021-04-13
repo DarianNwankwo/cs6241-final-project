@@ -3,15 +3,15 @@ include("params.jl")
 include("policy.jl")
 
 function susceptibility_dynamics(s::State, p::Params)
-    return round(Int64, s.SP - (p.αMR*s.MR + p.αFR*s.FR + p.αMW*s.MW + p.αFW*s.FW)*s.SP)
+    return round(Int64, s.SP + p.b - (p.δP + p.αMR*s.MR + p.αFR*s.FR + p.αMW*s.MW + p.αFW*s.FW)*s.SP)
 end
 
 function infected_dynamics(s::State, p::Params)
-    return round(Int64, s.IP + (p.αMR*s.MR + p.αFR*s.FR + p.αMW*s.MW + p.αFW*s.FW)*s.SP)
+    return round(Int64, s.IP + (p.αMR*s.MR + p.αFR*s.FR + p.αMW*s.MW + p.αFW*s.FW)*s.SP - (p.δP + p.ρ)*s.IP)
 end
 
 function recovered_dynamics(s::State, p::Params)
-    return round(Int64, s.RP + p.ρ*s.IP)
+    return round(Int64, s.RP + p.ρ*s.IP - p.δP*s.RP)
 end
 
 function regular_female_dynamics(s::State, p::Params)
