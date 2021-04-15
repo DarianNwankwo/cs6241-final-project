@@ -4,7 +4,7 @@
 *Sprints end on Monday's, so the week of a given date extends until the upcoming Monday.*
 
 Week of April 12, 2021:
-- [ ] Update ODEs 5-8, as listed in the Overleaf, according to Mallory and Alex's bullshit (her words...).
+- [X] Update ODEs 5-8, as listed in the Overleaf, according to Mallory and Alex's bullshit (her words...).
 - [ ] Discretize our continuous ODEs to daily timesteps.
 - [ ] Implement the discretization in the simulator.
 
