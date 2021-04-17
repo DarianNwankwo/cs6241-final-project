@@ -1,4 +1,5 @@
-println("CS6241 Final Project Baby!")
+using Plots
+plotly()
 
 include("state.jl")
 include("simulator.jl")
