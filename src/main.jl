@@ -5,8 +5,9 @@ include("simulator.jl")
 include("policy.jl")
 include("params.jl")
 
-params = Params(0.001, 0.001, 0.001, 0.001, 0.1, 0.1, 0.1, 1, 0.001, 0.001, 0.001, 0.001, 0.001)
-base_state = State(1000, 10, 0, 100, 100, 0, 0, 0)
-base_policy = Policy(0, 0)
+params = Params(0.75, 0.5, 500, 0.05, 1, 5, 5, 1)
+initial_state = State(10, 100, 10, 10, 1)
 
-sim(base_state, params, base_policy, 200)
+n = 50
+
+sim(initial_state, params, n)
