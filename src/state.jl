@@ -1,6 +1,7 @@
 struct State
-    FR::Int64
-    MR::Int64
+    # FR::Int64
+    # MR::Int64
+    R::Int64
     FW::Int64
     MW::Int64
     t::Int64
