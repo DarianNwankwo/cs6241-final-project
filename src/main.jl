@@ -9,10 +9,12 @@ include("params.jl")
 params = Params(0.75, 0.5, 500, 0.05, 1, 5, 5, 1)
 # initial_state = State(10, 100, 10, 10, 1)
 initial_state = State(110, 10, 10, 1)
+policy = Policy(5, 5)
 
 n = 50
 
-states = sim(initial_state, params, n)
+# states = sim(initial_state, params, policy, n)
+states, actions = sample(initial_state, params, n)
 
 tvals = [s.t for s in states]
 # frs = [s.R*p.α for s in states]
@@ -26,6 +28,5 @@ mws = [s.MW for s in states]
 plot(tvals, rs, label="R")
 plot!(tvals, fws, label="FW")
 plot!(tvals, mws, label="MW")
-
 
 savefig("testplot.png")

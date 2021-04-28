@@ -4,7 +4,7 @@ struct Params
     K::Float32
     δ::Float32
     b::Float32
-    AWF::Float32
-    AWM::Float32
+    αWMMax::Float32
+    αWFMax::Float32
     dt::Float32
 end
