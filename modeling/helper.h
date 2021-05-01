@@ -33,6 +33,8 @@ extern int gNumMosquitoesPerNode; //number of mosquitoes per grid node
 extern int gNt; //max number of timeslices taken
 extern double gTerminalT; //terminal time
 extern double gDT; //dt
+extern double gH;
+extern double gTau; 
 extern double gTau; //semi-lagrangian step
 
 //Control specifications

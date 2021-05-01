@@ -29,10 +29,12 @@ int gFemaleWMaxNodes = 25; //max node number of female w-type
 int gMaleWMaxNodes = 25; //max node number of male w-type
 int gNumMosquitoesPerNode = 10;
 
-double gTerminalT = 1; //terminal time
+double gTerminalT = 50; //terminal time
 int gNt = 50; //max number of timeslices taken
 //double gDT = gTerminalT / gNt; //dt
 double gDT = 1; //dt
+double gTau = gDT; 
+double gH = 1;
 
 double gAWMMax = 10; //max males that can be released
 double gAWFMax = 10;
