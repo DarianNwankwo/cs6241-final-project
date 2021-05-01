@@ -18,24 +18,26 @@
 
 //Declaring parameter values
 double gAlpha = 0.75;
-double gK = 10000; //carrying capacity
-double gRate = 0.5; // r
-double gAlleleEffect = 2; //b - strength of the allele effect
-double gDelta = 100; // constant death rate
-
+double gK = 500; //carrying capacity
+double gRate = 0.05; // r
+double gAlleleEffect = 1; //b - strength of the allele effect
+double gDelta = 0.025; // constant death rate
+double gBitingPenalty = 0.5; 
 //Grid formation - Note: All of these are initial values to test / placeholders
-int gRegularMaxNodes = 50; //max node number of regular mosquitoes
-int gFemaleWMaxNodes = 50; //max node number of female w-type
-int gMaleWMaxNodes = 50; //max node number of male w-type
-int gNumMosquitoesPerNode = 100;
+int gRegularMaxNodes = 25; //max node number of regular mosquitoes
+int gFemaleWMaxNodes = 25; //max node number of female w-type
+int gMaleWMaxNodes = 25; //max node number of male w-type
+int gNumMosquitoesPerNode = 10;
 
 double gTerminalT = 1; //terminal time
-int gNt = 100; //max number of timeslices taken
-double gDT = gTerminalT / gNt; //dt
+int gNt = 50; //max number of timeslices taken
+//double gDT = gTerminalT / gNt; //dt
+double gDT = 1; //dt
 
 double gAWMMax = 10; //max males that can be released
 double gAWFMax = 10;
-double gInfinity = 1e7;
+double gInfinity = gNumMosquitoesPerNode * 1000;
+double gControlInfty = 20;
 
 double gFemaleWControls[2] = {0, gAWFMax}; //array to hold control values tested for female w type
 double gMaleWControls[2] = {0, gAWMMax}; //array to hold control values tested for male w type

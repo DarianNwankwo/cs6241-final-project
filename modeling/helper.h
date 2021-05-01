@@ -24,7 +24,7 @@ extern double gK; //carrying capacity
 extern double gRate; // r
 extern double gAlleleEffect; //b - strength of the allele effect
 extern double gDelta; // constant death rate
-
+extern double gBitingPenalty; 
 //Grid formation
 extern int gRegularMaxNodes; //max number of regular mosquitoes
 extern int gFemaleWMaxNodes; //max number of female w-type
@@ -39,6 +39,7 @@ extern double gTau; //semi-lagrangian step
 extern double gAWMMax; //max males that can be released
 extern double gAWFMax;
 extern double gInfinity;
+extern double gControlInfty;
 
 extern double gFemaleWControls[]; //array to hold control values tested for female w type
 extern double gMaleWControls[]; //array to hold control values tested for male w type

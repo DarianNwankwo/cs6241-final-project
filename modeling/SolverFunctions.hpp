@@ -20,6 +20,8 @@ void optimalValue (multiarray *aValueFunction, multiarray *aFemaleWControls, mul
 
 void initializeArray (multiarray *aArray, const double aIllegalValue);
 
+void writeToFile(multiarray *aValueFunction, multiarray *aFemaleWControls, multiarray *aMaleWControls, int aSelectedTimeslice);
+
 void zikaHJBSolver();
 
 #endif /* SolverFunctions_hpp */
