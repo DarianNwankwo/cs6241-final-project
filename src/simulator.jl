@@ -46,3 +46,13 @@ function sim(is::State, p::Params, po::Policy, n::Int64)
 
     return states
 end
+
+function generate_trajectories(is::State, p::Params, n::Int64, num_trajectories::Int64)
+    trajectories = []
+
+    for i = 1:num_trajectories
+        push!(trajectories, sample(is, p, n))
+    end
+
+    return trajectories
+end

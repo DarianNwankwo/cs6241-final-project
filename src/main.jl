@@ -12,9 +12,12 @@ initial_state = State(110, 10, 10, 1)
 policy = Policy(5, 5)
 
 n = 50
+num_trajectories = 10
 
 # states = sim(initial_state, params, policy, n)
-states, actions = sample(initial_state, params, n)
+trajectories = generate_trajectories(initial_state, params, n, num_trajectories)
+
+states = trajectories[1][1]
 
 tvals = [s.t for s in states]
 # frs = [s.R*p.α for s in states]
