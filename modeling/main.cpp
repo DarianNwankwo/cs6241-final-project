@@ -17,11 +17,11 @@
 #include "SolverFunctions.hpp"
 
 //Declaring parameter values
-double gAlpha = 0.75;
+double gAlpha = 0.65;
 double gK = 500; //carrying capacity
-double gRate = 0.05; // r
+double gRate = 0.25; // r
 double gAlleleEffect = 1; //b - strength of the allele effect
-double gDelta = 0.025; // constant death rate
+double gDelta = 0.0025; // constant death rate
 double gBitingPenalty = 0.5; 
 //Grid formation - Note: All of these are initial values to test / placeholders
 int gRegularMaxNodes = 25; //max node number of regular mosquitoes

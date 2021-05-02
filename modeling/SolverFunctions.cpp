@@ -105,7 +105,9 @@ void optimalValue (multiarray *aValueFunction, multiarray *aFemaleWControls, mul
                 
                 //Euler step to advance mosquito populations one step forward in time
                 double nextR = currentNumR + gDT * (gRate * (1 - ((currentNumF + currentNumM) / gK)) * ((gAlpha * currentNumR * (1 - gAlpha) * currentNumR) / (gAlleleEffect + currentNumM)) - gDelta * currentNumR);
+                
                 double nextFW = currentNumFW + gDT * (gRate * gAlpha *  (1 - ((currentNumF + currentNumM) / gK)) * (currentNumFW * (currentNumM / (gAlleleEffect + currentNumM))) - gDelta * currentNumFW + currentWFControl);
+                
                 double nextMW = currentNumMW + gDT * (gRate * (1 - gAlpha) * (1 - ((currentNumF + currentNumM) / gK)) * (currentNumFW * (currentNumM / (gAlleleEffect + currentNumM))) - gDelta * currentNumMW + currentWMControl);
                 
                 //check to see if any of the next values are out of bounds
@@ -335,6 +337,9 @@ void dynamicProgLoop(multiarray *aValueFunction, multiarray *aFemaleWControls, m
  *============================================================================*/
 void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, multiarray *aMaleWControl, double aFWStart, double aMWStart, double aRStart, double aTimeStart, double aTau){
     
+    //debugging
+    cout << "in traj tracer" << "\n";
+    
     //Vector initialization to hold stored state values
     vector<double> fwVals;
     vector<double> mwVals;
@@ -367,6 +372,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
     bool loopDone = false;
     
     while (!loopDone){
+        
         //get current state values
         double currentWF = fwVals[loopIndex];
         double currentWM = mwVals[loopIndex];
@@ -428,7 +434,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
         optimalWMControls.push_back(ocWM);
         
         //end loop if tNext > terminal time or if value function infinite
-        if ((tNext > gTerminalT) || (bestVal >= gInfinity)){
+        if ((tNext == gTerminalT) || (bestVal >= gInfinity) || (loopIndex == gNt - 1)){
             loopDone = true;
         }
         
@@ -480,12 +486,16 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
         tfile << optimalWFControls[controlIdx];
         if(controlIdx != loopIndex) {
         tfile << " ";
+        //cout << optimalWFControls[controlIdx] << "\n";
       }
     }
+    tfile << endl;
+    
     for(int controlIdx = 0; controlIdx <= loopIndex; controlIdx++) {
         tfile << optimalWMControls[controlIdx];
         if(controlIdx != loopIndex) {
         tfile << " ";
+        //cout << optimalWMControls[controlIdx] << "\n";
       }
     }
     
@@ -586,6 +596,6 @@ void zikaHJBSolver(){
     
     dynamicProgLoop(&u, &controlsFW, &controlsMW);
     
-    optimalTrajectory(&u, &controlsFW, &controlsMW, 10, 10, 10, 0, gTau); 
+    optimalTrajectory(&u, &controlsFW, &controlsMW, 10, 0, 20, 0, gTau);
     
 }
