@@ -1,5 +1,5 @@
 # TODO: Policy eventually needs to be dependent on state, be learned, etc.
 struct Policy
-    αWF::Int64
-    αWM::Int64
+    αWF::Float64
+    αWM::Float64
 end

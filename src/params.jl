@@ -6,5 +6,6 @@ struct Params
     b::Float32
     αWMMax::Float32
     αWFMax::Float32
+    bp::Float32
     dt::Float32
 end

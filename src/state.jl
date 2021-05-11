@@ -1,8 +1,6 @@
 struct State
-    # FR::Int64
-    # MR::Int64
-    R::Int64
-    FW::Int64
-    MW::Int64
-    t::Int64
+    R::Float64
+    FW::Float64
+    MW::Float64
+    t::Float64
 end
