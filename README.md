@@ -6,11 +6,10 @@
 ## Tentative Roadmap
 *Sprints end on Monday's, so the week of a given date extends until the upcoming Monday.*
 
-Week of April 12, 2021:
-- [X] Update ODEs 5-8, as listed in the Overleaf, according to Mallory and Alex's bullshit (her words...).
-- [X] Discretize our continuous ODEs to daily timesteps.
-- [ ] Implement the discretization in the simulator.
+Week of May 10, 2021:
+- [ ] Quadratic cost function (Mallory).
+- [ ] Match parameter settings with cpp implementation (Marc).
+- [ ] All support points on each step (Marc).
+- [ ] Numerical methods to find min Q / nonconvex opt (Mallory).
+- [ ] Improving support point selection schemes (Mallory and Marc). 
 
-Week of April 19, 2021:
-- [ ] Beging writing the ADP implementation (add nuance here when the time comes)
-- [ ] Find a dataset that provides us with mosquito counts, birth rates, etc. (provides us with the necessary parameters listed in our model)
