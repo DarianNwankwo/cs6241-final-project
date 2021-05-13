@@ -8,8 +8,8 @@
 
 Week of May 10, 2021:
 - [ ] Quadratic cost function (Mallory).
-- [ ] Match parameter settings with cpp implementation (Marc).
-- [ ] All support points on each step (Marc).
+- [x] Match parameter settings with cpp implementation (Marc).
+- [x] All support points on each step (Marc).
 - [ ] Numerical methods to find min Q / nonconvex opt (Mallory).
 - [ ] Improving support point selection schemes (Mallory and Marc). 
 

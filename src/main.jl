@@ -8,10 +8,16 @@ include("policy.jl")
 include("params.jl")
 include("gpdp.jl")
 
-params = Params(0.75, 0.5, 500, 0.05, 1, 5, 5, 0.5, 1)
+# include("src/state.jl")
+# include("src/simulator.jl")
+# include("src/policy.jl")
+# include("src/params.jl")
+# include("src/gpdp.jl")
+
+params = Params(0.65, 0.25, 500, 0.0025, 1, 10, 10, 0.5, 1)
 # initial_state = State(10, 100, 10, 10, 1)
-initial_state = State(110, 10, 10, 1)
-policy = Policy(5, 5)
+initial_state = State(30, 0, 0, 1)
+# policy = Policy(5, 5)
 
 n = 50
 num_trajectories = 10

@@ -7,9 +7,9 @@ function step(s::State, p::Params, po::Policy)
     M = (1-p.α)s.R + s.MW
     F = p.α*s.R + s.FW
 
-    R = round(s.R + p.dt * (p.r * (1 - ((F + M) / p.K)) * ((p.α*s.R*(1-p.α)*s.R)/(p.b+M)) - p.δ*s.R))
-    FW = round(s.FW + p.dt * (p.r * p.α * (1 - ((F + M) / p.K)) * s.FW * (M / (p.b + M)) - p.δ * s.FW + po.αWF))
-    MW = round(s.MW + p.dt * (p.r * (1 - p.α) * (1 - ((F + M) / p.K)) * s.FW * (M / (p.b + M)) - p.δ * s.MW + po.αWM))
+    R = s.R + p.dt * (p.r * (1 - ((F + M) / p.K)) * ((p.α*s.R*(1-p.α)*s.R)/(p.b+M)) - p.δ*s.R)
+    FW = s.FW + p.dt * (p.r * p.α * (1 - ((F + M) / p.K)) * s.FW * (M / (p.b + M)) - p.δ * s.FW + po.αWF)
+    MW = s.MW + p.dt * (p.r * (1 - p.α) * (1 - ((F + M) / p.K)) * s.FW * (M / (p.b + M)) - p.δ * s.MW + po.αWM)
 
     # new_state = State(FR, MR, FW, MW, s.t+1)
     new_state = State(R, FW, MW, s.t+1)
@@ -23,8 +23,8 @@ function sample(is::State, p::Params, n::Int64)
     actions = Policy[]
     push!(states, state)
     for i = 2:n
-        αWM = rand() < 0.5 ? 0 : p.αWMMax
-        αWF = rand() < 0.5 ? 0 : p.αWFMax
+        αWM = rand() * p.αWMMax
+        αWF = rand() * p.αWFMax
         po = Policy(αWM, αWF)
         state = step(state, p, po)
         push!(actions, po)

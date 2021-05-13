@@ -1,11 +1,11 @@
 struct Params
-    α::Float32
-    r::Float32
-    K::Float32
-    δ::Float32
-    b::Float32
-    αWMMax::Float32
-    αWFMax::Float32
-    bp::Float32
-    dt::Float32
+    α::Float64
+    r::Float64
+    K::Float64
+    δ::Float64
+    b::Float64
+    αWMMax::Float64
+    αWFMax::Float64
+    bp::Float64
+    dt::Float64
 end
