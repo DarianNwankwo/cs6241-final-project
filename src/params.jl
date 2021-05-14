@@ -8,4 +8,6 @@ struct Params
     αWFMax::Float64
     bp::Float64
     dt::Float64
+    sample_state_func
+    sample_control_func
 end

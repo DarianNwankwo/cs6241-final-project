@@ -17,7 +17,7 @@ function step(s::State, p::Params, po::Policy)
     return new_state
 end
 
-function sample(is::State, p::Params, n::Int64)
+function sample_trajectory(is::State, p::Params, n::Int64)
     state = is
     states = State[]
     actions = Policy[]
@@ -50,8 +50,25 @@ function generate_trajectories(is::State, p::Params, n::Int64, num_trajectories:
     trajectories = []
 
     for i = 1:num_trajectories
-        push!(trajectories, sample(is, p, n))
+        push!(trajectories, sample_trajectory(is, p, n))
     end
 
     return trajectories
+end
+
+function simgp(is::State, p::Params, pigp1, pigp2, n::Int64)
+    state = is
+    states = State[]
+    push!(states, state)
+    for i = 2:n
+        αWF = min(max(0.0, round(predict_y(pigp1, [state.R state.FW state.MW]')[1][1])), p.αWFMax)
+        αMF = min(max(0.0, round(predict_y(pigp2, [state.R state.FW state.MW]')[1][1])), p.αWMMax)
+
+        po = Policy(αWF, αMF)
+
+        state = step(state, p, po)
+        push!(states, state)
+    end
+
+    return states
 end

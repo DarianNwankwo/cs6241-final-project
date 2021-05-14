@@ -11,5 +11,10 @@ Week of May 10, 2021:
 - [x] Match parameter settings with cpp implementation (Marc).
 - [x] All support points on each step (Marc).
 - [ ] Numerical methods to find min Q / nonconvex opt (Mallory).
-- [ ] Improving support point selection schemes (Mallory and Marc). 
-
+- [ ] Improving support point selection schemes (Mallory and Marc).
+  - [x] Randomly sample States and Controls (Marc)
+  - [x] Time slice States and Controls (Marc)
+  - [ ] Time slice cumulative States and Controls (Marc)
+  - [ ] Time slice cumulative sample States and Controls (Marc)
+  - [ ] Gaussian Sample future States and Controls (Marc)
+- [ ] Hyperparameter tuning for kernel values (Marc)
