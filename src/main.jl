@@ -58,3 +58,5 @@ end
 run(50, 100, "random_sample", sample_random_states, sample_random_controls)
 run(50, 10, "all_sample", sample_all_states, sample_all_controls)
 run(50, 100, "time_slice", sample_time_slice_states, sample_time_slice_controls)
+run(50, 20, "cumulative_sample", sample_cumulative_states, sample_cumulative_controls)
+run(50, 30, "cum_state_rand_controls", sample_cumulative_states, sample_random_controls)

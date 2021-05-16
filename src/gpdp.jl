@@ -17,23 +17,63 @@ function expectation(gp, state, policy, params)
     return predict_y(gp, [ns.R ns.FW ns.MW]')[1][1]
 end
 
-function fit_vgp(states, V)
+function hyperparam_kernel_vgp(states, V)
     s = vcat([[st.R st.FW st.MW] for st in states]...)
 
     mean = MeanZero()
-    kernel = SE(2.0, 0.0) # TODO: DON'T HARDCODE
+    best_kernel = SE(0.0, 0.0)
+    best_gp = GP(s', V, mean, best_kernel)
+    for ls = 0.0:0.25:2.0
+        for σ = 0.0:0.25:2.0
+            kernel = SE(ls, σ)
+
+            gp = GP(s', V, mean, kernel)
+            if gp.mll > best_gp.mll
+                best_gp = gp
+                best_kernel = kernel
+            end
+        end
+    end
+
+    return best_kernel, best_gp
+end
+
+function hyperparam_kernel_qgp(controls, Q)
+    c = vcat([[co.αWF co.αWM] for co in controls]...)
+
+    mean = MeanZero()
+    best_kernel = SE(0.0, 0.0)
+    best_gp = GP(c', Q, mean, best_kernel)
+    for ls = 0.0:0.25:2.0
+        for σ = 0.0:0.25:2.0
+            kernel = SE(ls, σ)
+
+            gp = GP(c', Q, mean, kernel)
+            if gp.mll > best_gp.mll
+                best_gp = gp
+                best_kernel = kernel
+            end
+        end
+    end
+
+    return best_kernel, best_gp
+end
+
+function fit_vgp(states, V, kernel)
+    s = vcat([[st.R st.FW st.MW] for st in states]...)
+
+    mean = MeanZero()
 
     gp = GP(s', V, mean, kernel)
     return gp
 end
 
-function fit_qgp(policies, Q)
-    p = vcat([[po.αWF po.αWM] for po in policies]...)
+function fit_qgp(controls, Q, kernel)
+    c = vcat([[co.αWF co.αWM] for co in controls]...)
 
     mean = MeanZero()
-    kernel = SE(2.0, 2.0) # TODO: DON'T HARDCODE
 
-    gp = GP(p', Q, mean, kernel)
+    gp = GP(c', Q, mean, kernel)
     return gp
 end
 
@@ -79,6 +119,12 @@ function sample_time_slice_controls(trajectories, n)
     return controls
 end
 
+function sample_cumulative_controls(trajectories, n)
+    controls = vcat([traj[2][n:end] for traj in trajectories]...)
+
+    return controls
+end
+
 function sample_all_states(trajectories, n)
     states = vcat([traj[1] for traj in trajectories]...)
 
@@ -97,10 +143,24 @@ function sample_time_slice_states(trajectories, n)
     return states
 end
 
+function sample_cumulative_states(trajectories, n)
+    states = vcat([traj[1][n:end] for traj in trajectories]...)
+
+    return states
+end
+
 function learn(trajectories, params, n)
     sample_states = params.sample_state_func(trajectories, n)
     V = [terminal_cost(state, params) for state in sample_states]
-    Vgp = fit_vgp(sample_states, V)
+    Vkernel, Vgp = hyperparam_kernel_vgp(sample_states, V)
+
+    # Find best Q kernel from a sample
+    sample_controls = params.sample_control_func(trajectories, n-1)
+    st = sample(sample_states)
+    Qx = [cost(st, co, params) + 0.99*expectation(Vgp, st, co, params) for co in sample_controls]
+
+    Qkernel, Qgp = hyperparam_kernel_qgp(sample_controls, Qx)
+
     final_pis = []
     for i = n-1:-1:1
         pis = []
@@ -113,7 +173,7 @@ function learn(trajectories, params, n)
             sample_controls = params.sample_control_func(trajectories, i)
             Qx = [cost(st, co, params) + 0.99*expectation(Vgp, st, co, params) for co in sample_controls]
 
-            Qgp = fit_qgp(sample_controls, Qx)
+            Qgp = fit_qgp(sample_controls, Qx, Qkernel)
 
             #TODO: Numerical methods for finding min instead of looking at support policies
             umin = sample_controls[argmin([predict_y(Qgp, [co.αWF co.αWM]')[1][1] for co in sample_controls])]
@@ -124,7 +184,7 @@ function learn(trajectories, params, n)
             push!(V, predict_y(Qgp, cumin)[1][1])
         end
 
-        Vgp = fit_vgp(sample_states, V)
+        Vgp = fit_vgp(sample_states, V, Vkernel)
         final_pis = pis
     end
 
