@@ -37,6 +37,11 @@ void optimalValue (multiarray *aValueFunction, multiarray *aFemaleWControls, mul
     
     //Mallory Note: For now, I'd prefer to NOT do interpolation in time as well. With that said, we need to think about the grid / timescales to make sure they make sense. Also, be careful with typecasting!
     
+    //debugging
+    if ((aGridNumR == 27) && (aGridNumFW == 0) && (aGridNumMW == 0) && (aTimeIndex == 1)){
+        //break
+    }
+    
     //Current number of mosquitoes of each type at the current  timestep.
     double currentNumR = gNumMosquitoesPerNode * aGridNumR;
     double currentNumFW = gNumMosquitoesPerNode * aGridNumFW;
@@ -362,6 +367,8 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
     int mwIdx = aMWStart / gH;
     int rIdx = aRStart / gH;
     
+    //cout << "getting starting OC" << "\n"; 
+    
     double startingWFOC = (*aFemaleWControl)[fwIdx][mwIdx][rIdx][timeIdx];
     double startngWMOC =  (*aMaleWControl)[fwIdx][mwIdx][rIdx][timeIdx];
     
@@ -387,7 +394,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
         double savedNextR = gInfinity;
         
         int nextTimeIdx = loopIndex + 1; //Note - this assumes that tau = DT!
-        
+        //cout << "start control loop" << "\n";
         //Loop over controls
         for (short int fwControlCandidateIndex = 0; fwControlCandidateIndex < 2; fwControlCandidateIndex++ ){
             
@@ -422,7 +429,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
                 
             }//end mw control loop
         }//end fw control loop
-        
+        //cout << "end control loop" << "\n";
         //save optimal values, advance loop, end loop if needed (if infinite value)
         double tNext = loopIndex * gDT; //note: assumes tau = gDT!
         
@@ -596,6 +603,6 @@ void zikaHJBSolver(){
     
     dynamicProgLoop(&u, &controlsFW, &controlsMW);
     
-    optimalTrajectory(&u, &controlsFW, &controlsMW, 10, 0, 20, 0, gTau);
+    optimalTrajectory(&u, &controlsFW, &controlsMW, 0, 0, 30, 0, gTau);
     
 }
