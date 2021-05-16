@@ -14,7 +14,7 @@ Week of May 10, 2021:
 - [ ] Improving support point selection schemes (Mallory and Marc).
   - [x] Randomly sample States and Controls (Marc)
   - [x] Time slice States and Controls (Marc)
-  - [ ] Time slice cumulative States and Controls (Marc)
-  - [ ] Time slice cumulative sample States and Controls (Marc)
+  - [x] Time slice cumulative States and Controls (Marc)
+  - [x] Time slice cumulative sample States and Controls (Marc)
   - [ ] Gaussian Sample future States and Controls (Marc)
-- [ ] Hyperparameter tuning for kernel values (Marc)
+- [x] Hyperparameter tuning for kernel values (Marc)
