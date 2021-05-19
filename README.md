@@ -17,4 +17,5 @@ Week of May 10, 2021:
   - [x] Time slice cumulative States and Controls (Marc)
   - [x] Time slice cumulative sample States and Controls (Marc)
   - [ ] Gaussian Sample future States and Controls (Marc)
+- [x] Maintain policy for each time step? (Marc)
 - [x] Hyperparameter tuning for kernel values (Marc)

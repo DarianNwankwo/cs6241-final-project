@@ -21,25 +21,67 @@ function run(n, num_trajectories, name, sample_state_func, sample_control_func)
 
     trajectories = generate_trajectories(initial_state, params, n, num_trajectories)
 
-    Vgp, pis, states = learn(trajectories, params, n)
+    Vgp, states, pis = learn(trajectories, params, n)
 
     mkpath(name)
 
     open(string(name, "/pi_output.txt"), "w") do io
-        for co in pis
-            write(io, string(co.αWF, " ", co.αWM, "\n"))
+        for p in pis
+            write(io, "[\n")
+            for co in p
+                write(io, string(co.αWF, " ", co.αWM, "\n"))
+            end
+            write(io, "]\n")
         end
     end
 
     open(string(name, "/state_output.txt"), "w") do io
-        for st in states
-            write(io, string(st.R, " ", st.FW, " ", st.MW, " ", st.t, "\n"))
+        for s in states
+            write(io, "[\n")
+            for st in s
+                write(io, string(st.R, " ", st.FW, " ", st.MW, " ", st.t, "\n"))
+            end
+            write(io, "]\n")
         end
     end
 
-    pigp1, pigp2 = learn_pi(states, pis)
+    pisgp = []
+    for i = 1:n-1
+        push!(pisgp, learn_pi(states[i], pis[i]))
+    end
 
-    states = simgp(initial_state, params, pigp1, pigp2, n)
+    states, controls = simgp(initial_state, params, pisgp, n)
+
+    open(string(name, "/opt_trajectories.txt"), "w") do io
+        for st in states
+            write(io, string(st.FW, " "))
+        end
+        write(io, "\n")
+
+        for st in states
+            write(io, string(st.MW, " "))
+        end
+        write(io, "\n")
+
+        for st in states
+            write(io, string(st.R, " "))
+        end
+        write(io, "\n")
+
+        for st in states
+            write(io, string(st.t, " "))
+        end
+        write(io, "\n")
+
+        for co in controls
+            write(io, string(co.αWF, " "))
+        end
+        write(io, "\n")
+
+        for co in controls
+            write(io, string(co.αWM, " "))
+        end
+    end
 
     tvals = [s.t for s in states]
     rs = [s.R for s in states]

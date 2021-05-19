@@ -96,9 +96,24 @@ function learn_pi(states, pis)
     mean = MeanZero()
     kernel = SE(2.0, 2.0)
 
-    gp1 = GP(s', c[:,1], mean, kernel)
-    gp2 = GP(s', c[:,2], mean, kernel)
-    return gp1, gp2
+    best_gp1 = GP(s', c[:,1], mean, kernel)
+    best_gp2 = GP(s', c[:,2], mean, kernel)
+
+    # for ls = 0.0:0.25:4.0
+    #     for σ = 0.0:0.25:4.0
+    #         gp1 = GP(s', c[:,1], mean, kernel)
+    #
+    #         if gp1.mll > best_gp1.mll
+    #             best_gp1 = gp1
+    #         end
+    #
+    #         gp2 = GP(s', c[:,2], mean, kernel)
+    #         if gp2.mll > best_gp2.mll
+    #             best_gp2 = gp2
+    #         end
+    #     end
+    # end
+    return best_gp1, best_gp2
 end
 
 function sample_all_controls(trajectories, n)
@@ -149,34 +164,52 @@ function sample_cumulative_states(trajectories, n)
     return states
 end
 
+function find_min_Q_samples(controls, params, Qgp)
+    umin = controls[argmin([predict_y(Qgp, [co.αWF co.αWM]')[1][1] for co in controls])]
+
+    return umin
+end
+
+function find_min_Q_grid(controls, params, Qgp)
+    grid_controls = [Policy(αWF, αWM) for αWM = 0.0:params.αWMMax/20.0:params.αWMMax for αWF = 0.0:params.αWFMax/20.0:params.αWFMax]
+
+    umin = grid_controls[argmin([predict_y(Qgp, [co.αWF co.αWM]')[1][1] for co in grid_controls])]
+    return umin
+end
+
 function learn(trajectories, params, n)
     sample_states = params.sample_state_func(trajectories, n)
     V = [terminal_cost(state, params) for state in sample_states]
-    Vkernel, Vgp = hyperparam_kernel_vgp(sample_states, V)
+    # Vkernel, Vgp = hyperparam_kernel_vgp(sample_states, V)
+    Vkernel = SE(2.0, 2.0)
+    Qkernel = SE(2.0, 2.0)
+    Vgp = fit_vgp(sample_states, V, Vkernel)
 
     # Find best Q kernel from a sample
-    sample_controls = params.sample_control_func(trajectories, n-1)
-    st = sample(sample_states)
-    Qx = [cost(st, co, params) + 0.99*expectation(Vgp, st, co, params) for co in sample_controls]
+    # sample_controls = params.sample_control_func(trajectories, n-1)
+    # st = sample(sample_states)
+    # Qx = [cost(st, co, params) + expectation(Vgp, st, co, params) for co in sample_controls]
 
-    Qkernel, Qgp = hyperparam_kernel_qgp(sample_controls, Qx)
+    # Qkernel, Qgp = hyperparam_kernel_qgp(sample_controls, Qx)
 
     final_pis = []
+    all_states = []
+    push!(all_states, sample_states)
     for i = n-1:-1:1
         pis = []
         V = []
 
         sample_states = params.sample_state_func(trajectories, i)
+        push!(all_states, sample_states)
 
         # for st in states
         for st in sample_states
             sample_controls = params.sample_control_func(trajectories, i)
-            Qx = [cost(st, co, params) + 0.99*expectation(Vgp, st, co, params) for co in sample_controls]
+            Qx = [cost(st, co, params) + expectation(Vgp, st, co, params) for co in sample_controls]
 
             Qgp = fit_qgp(sample_controls, Qx, Qkernel)
 
-            #TODO: Numerical methods for finding min instead of looking at support policies
-            umin = sample_controls[argmin([predict_y(Qgp, [co.αWF co.αWM]')[1][1] for co in sample_controls])]
+            umin = find_min_Q_samples(sample_controls, params, Qgp)
             push!(pis, umin)
 
             cumin = [umin.αWF umin.αWM]'
@@ -185,8 +218,11 @@ function learn(trajectories, params, n)
         end
 
         Vgp = fit_vgp(sample_states, V, Vkernel)
-        final_pis = pis
+        push!(final_pis, pis)
+        # push!(final_pis, learn_pi(sample_states, pis))
+        # final_pis = pis
     end
 
-    return Vgp, final_pis, sample_states
+    # return reverse(final_pis)
+    return Vgp, reverse(all_states), reverse(final_pis)
 end

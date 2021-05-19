@@ -56,13 +56,14 @@ function generate_trajectories(is::State, p::Params, n::Int64, num_trajectories:
     return trajectories
 end
 
-function simgp(is::State, p::Params, pigp1, pigp2, n::Int64)
+function simgp_pi0(is::State, p::Params, pis, n::Int64)
     state = is
     states = State[]
     push!(states, state)
     for i = 2:n
-        αWF = min(max(0.0, round(predict_y(pigp1, [state.R state.FW state.MW]')[1][1])), p.αWFMax)
-        αMF = min(max(0.0, round(predict_y(pigp2, [state.R state.FW state.MW]')[1][1])), p.αWMMax)
+        pi_t = pis[1]
+        αWF = min(max(0.0, round(predict_y(pi_t[1], [state.R state.FW state.MW]')[1][1])), p.αWFMax)
+        αMF = min(max(0.0, round(predict_y(pi_t[2], [state.R state.FW state.MW]')[1][1])), p.αWMMax)
 
         po = Policy(αWF, αMF)
 
@@ -71,4 +72,24 @@ function simgp(is::State, p::Params, pigp1, pigp2, n::Int64)
     end
 
     return states
+end
+
+function simgp(is::State, p::Params, pis, n::Int64)
+    state = is
+    states = State[]
+    controls = Policy[]
+    push!(states, state)
+    for i = 2:n
+        pi_t = pis[i-1]
+        αWF = min(max(0.0, round(predict_y(pi_t[1], [state.R state.FW state.MW]')[1][1])), p.αWFMax)
+        αMF = min(max(0.0, round(predict_y(pi_t[2], [state.R state.FW state.MW]')[1][1])), p.αWMMax)
+
+        po = Policy(αWF, αMF)
+
+        state = step(state, p, po)
+        push!(controls, po)
+        push!(states, state)
+    end
+
+    return states, controls
 end
