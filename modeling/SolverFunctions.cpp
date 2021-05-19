@@ -342,9 +342,6 @@ void dynamicProgLoop(multiarray *aValueFunction, multiarray *aFemaleWControls, m
  *============================================================================*/
 void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, multiarray *aMaleWControl, double aFWStart, double aMWStart, double aRStart, double aTimeStart, double aTau){
     
-    //debugging
-    cout << "in traj tracer" << "\n";
-    
     //Vector initialization to hold stored state values
     vector<double> fwVals;
     vector<double> mwVals;
@@ -452,7 +449,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
     //write out results to trajectory plotting file
     ofstream tfile;
     
-    tfile.open("opt_trajectories.txt"); //optimal trajectory
+    tfile.open("opt_trajectories_classical.txt"); //optimal trajectory
     //Optimal Trajectory write to file
     
     for(int i = 0; i <= loopIndex; i++) {

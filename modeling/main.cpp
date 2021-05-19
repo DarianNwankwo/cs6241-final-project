@@ -19,10 +19,10 @@
 //Declaring parameter values
 double gAlpha = 0.5;
 double gK = 1000; //carrying capacity
-double gRate = 0.15; // r
-double gAlleleEffect = 2; //b - strength of the allele effect
-double gDelta = 0.0025; // constant death rate
-double gBitingPenalty = 2; 
+double gRate = 0.34; // r
+double gAlleleEffect = 3; //b - strength of the allele effect
+double gDelta = 0.064; // constant death rate
+double gBitingPenalty = 3;
 //Grid formation - Note: All of these are initial values to test / placeholders
 int gRegularMaxNodes = 70; //max node number of regular mosquitoes
 int gFemaleWMaxNodes = 70; //max node number of female w-type
@@ -36,8 +36,8 @@ double gDT = 1; //dt
 double gTau = gDT; 
 double gH = 1;
 
-double gAWMMax = 4; //max males that can be released
-double gAWFMax = 2;
+double gAWMMax = 2; //max males that can be released
+double gAWFMax = 4;
 double gInfinity = gNumMosquitoesPerNode * 1000;
 double gControlInfty = 20;
 
