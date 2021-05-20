@@ -59,6 +59,7 @@ end
 function simgp_pi0(is::State, p::Params, pis, n::Int64)
     state = is
     states = State[]
+    controls = Policy[]
     push!(states, state)
     for i = 2:n
         pi_t = pis[1]
@@ -68,10 +69,11 @@ function simgp_pi0(is::State, p::Params, pis, n::Int64)
         po = Policy(αWF, αMF)
 
         state = step(state, p, po)
+        push!(controls, po)
         push!(states, state)
     end
 
-    return states
+    return states, controls
 end
 
 function simgp(is::State, p::Params, pis, n::Int64)
