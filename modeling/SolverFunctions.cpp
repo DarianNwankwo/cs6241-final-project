@@ -364,7 +364,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
     int mwIdx = aMWStart / gH;
     int rIdx = aRStart / gH;
     
-    //cout << "getting starting OC" << "\n"; 
+    cout << "getting starting OC" << "\n"; 
     
     double startingWFOC = (*aFemaleWControl)[fwIdx][mwIdx][rIdx][timeIdx];
     double startngWMOC =  (*aMaleWControl)[fwIdx][mwIdx][rIdx][timeIdx];
@@ -428,7 +428,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
         }//end fw control loop
         //cout << "end control loop" << "\n";
         //save optimal values, advance loop, end loop if needed (if infinite value)
-        double tNext = loopIndex * gDT; //note: assumes tau = gDT!
+        double tNext = currentTime + gDT; //note: assumes tau = gDT!
         
         fwVals.push_back(savedNextWF);
         mwVals.push_back(savedNextWM);
@@ -438,7 +438,7 @@ void optimalTrajectory(multiarray *aValueFunction, multiarray *aFemaleWControl, 
         optimalWMControls.push_back(ocWM);
         
         //end loop if tNext > terminal time or if value function infinite
-        if ((tNext == gTerminalT) || (bestVal >= gInfinity) || (loopIndex == gNt - 1)){
+        if ((tNext > gTerminalT) || (bestVal >= gInfinity) || (loopIndex == gNt-1)){
             loopDone = true;
         }
         
